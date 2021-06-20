@@ -59,6 +59,7 @@ function getTracks(accessToken) {
   .then(result => result.tracks)
 }
 
+// Has to be fixed later
 function getListOfAlbumImages(tracks) {
   return tracks
     .map(track => track.album)

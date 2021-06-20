@@ -1,7 +1,9 @@
+import { Heading1 } from "../styles/h1";
+
 function ProjectTitle(props) {
   return (
     <div class="title">
-      <h1>{props.title}</h1>
+      <Heading1 spotify>{props.title}</Heading1>
     </div>
   );
 }

@@ -3,7 +3,7 @@
 }
 
 * {
-  padding: 0;
+padding: 0;
   margin: 0;
   box-sizing: border-box;
 }
@@ -14,9 +14,7 @@ body {
   color: var(--main-green-color);
 }
 
-ul {
-  list-style-type: none;
-}
+
 
 h1,
 h2 {
@@ -56,9 +54,9 @@ button {
   padding: 2em;
 }
 
-.cards {
-  display: flex;
-}
+
+
+
 
 .card {
   border-radius: 10px;

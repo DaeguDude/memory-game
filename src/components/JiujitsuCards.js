@@ -1,4 +1,5 @@
 import LevelMsg from "./LevelMsg";
+import styled from "styled-components";
 
 function JiujitsuCards(props) {
   const level = props.level;
@@ -12,17 +13,36 @@ function JiujitsuCards(props) {
   );
 }
 
+const Ul = styled.ul`
+  list-style-type: none;
+`
+const CardsUl = styled(Ul)`
+  display: flex;
+`
+
+const BlackCardsUl = styled(CardsUl)`
+  background: #000;
+`
+
+
 function Cards(props) {
   const athletes = props.athletes;
 
   return (
-    <ul className="cards">
-      {athletes.map((athlete) => (
-        <Card key={athlete.key} img={athlete.img} name={athlete.name} />
-      ))}
-    </ul>
+    <>
+      <BlackCardsUl>
+        {athletes.map((athlete) => (
+          <Card key={athlete.key} img={athlete.img} name={athlete.name} />
+        ))}
+      </BlackCardsUl>
+    </>
   );
 }
+
+
+
+  
+
 
 // export default Cards;
 
