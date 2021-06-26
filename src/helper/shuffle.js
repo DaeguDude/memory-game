@@ -1,5 +1,7 @@
 function shuffle(array) {
-  var m = array.length,
+  const shuffledArray = [...array];
+
+  var m = shuffledArray.length,
     t,
     i;
 
@@ -9,10 +11,12 @@ function shuffle(array) {
     i = Math.floor(Math.random() * m--);
 
     // And swap it with the current element.
-    t = array[m];
-    array[m] = array[i];
-    array[i] = t;
+    t = shuffledArray[m];
+    shuffledArray[m] = shuffledArray[i];
+    shuffledArray[i] = t;
   }
 
-  return array;
+  return shuffledArray;
 }
+
+export { shuffle };
