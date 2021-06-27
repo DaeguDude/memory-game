@@ -1,4 +1,10 @@
-function RestartMsg(props) {
+import React from "react";
+
+type RestartMsgProps = {
+  bestScore: number;
+};
+
+function RestartMsg(props: RestartMsgProps): JSX.Element {
   return (
     <div className="restart">
       <h2 className="restart__item">Game Over!</h2>

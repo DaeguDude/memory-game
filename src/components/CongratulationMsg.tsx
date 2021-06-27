@@ -1,4 +1,6 @@
-function CongratulationMsg(props) {
+import React from "react";
+
+function CongratulationMsg(): JSX.Element {
   return (
     <div className="congratulation">
       <h1>WOWZA!!!</h1>
