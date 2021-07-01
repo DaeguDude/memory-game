@@ -12,10 +12,6 @@ import styled from "styled-components";
 import { shuffle } from "./helper/shuffle";
 
 import { v4 as uuidv4 } from "uuid";
-const score = {
-  currentScore: 3,
-  bestScore: 5,
-};
 
 const StyledImg = styled.img`
   width: 200px;
@@ -86,9 +82,18 @@ const App = (): JSX.Element => {
       const areAllCardsClicked = cards.every((card) => card.clicked);
       if (areAllCardsClicked) {
         setLevel((prevLevel: number) => prevLevel + 1);
+        setIsLoading(true);
       }
     }
   }, [cards]);
+
+  useEffect(() => {
+    if (isLoading) {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
+    }
+  }, [isLoading]);
 
   const resetGame = () => {
     setLevel(1);
@@ -121,11 +126,8 @@ const App = (): JSX.Element => {
     <div>
       <Header scores={{ score, bestScore }} />
       <Main></Main>
-      <h1>{level}</h1>
-
-      {/* {isLoading ? <Loading> : } */}
-
-      {Cards}
+      {isLoading ? <Loading level={level} /> : null}
+      {!isLoading && Cards}
     </div>
   );
 };
