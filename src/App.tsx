@@ -9,14 +9,10 @@ import "./styles/style.css";
 import React, { useState, useEffect } from "react";
 import getSpotify from "./api/spotify";
 import styled from "styled-components";
+import { StyledImg } from "./components/StyledImg";
 import { shuffle } from "./helper/shuffle";
 
 import { v4 as uuidv4 } from "uuid";
-
-const StyledImg = styled.img`
-  width: 200px;
-  height: 200px;
-`;
 
 type AlbumProps = {
   src: string;
@@ -24,11 +20,7 @@ type AlbumProps = {
 };
 
 const Album = ({ src, onClickHandler }: AlbumProps): JSX.Element => {
-  return (
-    <div>
-      <StyledImg src={src} onClick={onClickHandler} />
-    </div>
-  );
+  return <StyledImg src={src} onClick={onClickHandler} />;
 };
 
 const App = (): JSX.Element => {
@@ -63,7 +55,6 @@ const App = (): JSX.Element => {
 
     switch (level) {
       case 1:
-        setIsLoading(true);
         setCards(shuffledCards.slice(0, 2));
         break;
       case 2:
@@ -85,7 +76,6 @@ const App = (): JSX.Element => {
     if (cards.length !== 0) {
       const areAllCardsClicked = cards.every((card) => card.clicked);
       if (areAllCardsClicked) {
-        alert(`${level}`);
         setLevel((prevLevel: number) => prevLevel + 1);
       }
     }
@@ -140,21 +130,42 @@ const App = (): JSX.Element => {
     }
   };
 
-  const Cards = cards.map((card: Card) => (
-    <Album
-      key={card.id}
-      src={card.imgSrc}
-      onClickHandler={(e) => onClickHandler(e, card.id)}
-    />
-  ));
+  // const Cards = cards.map((card: Card) => (
+  //   <Album
+  //     key={card.id}
+  //     src={card.imgSrc}
+  //     onClickHandler={(e) => onClickHandler(e, card.id)}
+  //   />
+  // ));
 
   return (
     <div>
       <Header scores={{ score, bestScore }} />
-      <Main></Main>
+      {/* <Main>{!isLoading && Cards}</Main> */}
+      <Main>
+        {!isLoading && <Cards cards={cards} onClickHandler={onClickHandler} />}
+      </Main>
       {isLoading ? <Loading level={level} /> : null}
       {isDone ? <CongratulationMsg /> : null}
-      {!isLoading && Cards}
+    </div>
+  );
+};
+
+type CardsProps = {
+  cards: Card[];
+  onClickHandler: (e: React.MouseEvent, id: string) => void;
+};
+
+const Cards = ({ cards, onClickHandler }: CardsProps) => {
+  return (
+    <div className="cards">
+      {cards.map((card: Card) => (
+        <Album
+          key={card.id}
+          src={card.imgSrc}
+          onClickHandler={(e) => onClickHandler(e, card.id)}
+        />
+      ))}
     </div>
   );
 };
@@ -166,15 +177,20 @@ type HeaderProps = {
 const Header = (props: HeaderProps): JSX.Element => {
   return (
     <header className="header">
-      <ProjectTitle title="Jiujitsu Memory Game" />
+      <ProjectTitle title="K-POP Memory Game" />
       <ScoreBoard scores={props.scores} />
     </header>
   );
 };
 
 const Main = styled.div`
-  display: flex;
-  flex-wrap: wrap;
+  .cards {
+    padding: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 200px);
+    column-gap: 2rem;
+    row-gap: 2rem;
+  }
 `;
 
 export default App;
