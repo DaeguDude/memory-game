@@ -38,6 +38,7 @@ const App = (): JSX.Element => {
   const [level, setLevel] = useState(1);
   const [cards, setCards] = useState<[] | Card[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isDone, setIsDone] = useState<boolean>(false);
 
   // Data fetching, subscription, manually changing the DOM..
   useEffect(() => {
@@ -62,16 +63,19 @@ const App = (): JSX.Element => {
 
     switch (level) {
       case 1:
-        setCards(shuffledCards.slice(0, 4));
+        setIsLoading(true);
+        setCards(shuffledCards.slice(0, 2));
         break;
       case 2:
-        setCards(shuffledCards.slice(0, 8));
+        setIsLoading(true);
+        setCards(shuffledCards.slice(0, 4));
         break;
       case 3:
-        setCards(shuffledCards.slice(0, 12));
+        setIsLoading(true);
+        setCards(shuffledCards.slice(0, 6));
         break;
       default:
-        console.log("Game Ends!");
+        setIsDone(true);
         break;
     }
   }, [level, allCards]);
@@ -81,8 +85,8 @@ const App = (): JSX.Element => {
     if (cards.length !== 0) {
       const areAllCardsClicked = cards.every((card) => card.clicked);
       if (areAllCardsClicked) {
+        alert(`${level}`);
         setLevel((prevLevel: number) => prevLevel + 1);
-        setIsLoading(true);
       }
     }
   }, [cards]);
@@ -91,13 +95,30 @@ const App = (): JSX.Element => {
     if (isLoading) {
       setTimeout(() => {
         setIsLoading(false);
-      }, 3000);
+      }, 2000);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (isDone) {
+      setTimeout(() => {
+        alert("GAME DONE");
+        setIsDone(false);
+        restartGame();
+      }, 5000);
+    }
+  });
 
   const resetGame = () => {
     setLevel(1);
     setScore(0);
+  };
+
+  const restartGame = () => {
+    // Show Congratulation Message for 3 seconds
+    setLevel(1);
+    setScore(0);
+    setBestScore(0);
   };
 
   const onClickHandler = (e: React.MouseEvent, id: string) => {
@@ -111,7 +132,12 @@ const App = (): JSX.Element => {
     );
 
     setCards(shuffle(newCards));
-    setScore((prevScore) => prevScore + 1);
+    setScore((prevScore) => {
+      return prevScore + 1;
+    });
+    if (score >= bestScore) {
+      setBestScore((bestScore) => bestScore + 1);
+    }
   };
 
   const Cards = cards.map((card: Card) => (
@@ -127,6 +153,7 @@ const App = (): JSX.Element => {
       <Header scores={{ score, bestScore }} />
       <Main></Main>
       {isLoading ? <Loading level={level} /> : null}
+      {isDone ? <CongratulationMsg /> : null}
       {!isLoading && Cards}
     </div>
   );
