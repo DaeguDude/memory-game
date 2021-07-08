@@ -1,5 +1,5 @@
 import axios from "axios";
-import { SpotifyConfig } from "./config";
+import { SpotifyConfig } from "../../config";
 
 async function getSpotify() {
   const token = await getToken();
