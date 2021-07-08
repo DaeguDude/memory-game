@@ -6,7 +6,7 @@
 .pnp.js
 
 # configuration
-src/config.js
+/src/api/config.js
 
 # testing
 /coverage
