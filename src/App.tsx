@@ -11,6 +11,7 @@ import getSpotify from "./api/spotify";
 import styled from "styled-components";
 import { StyledImg } from "./components/StyledImg";
 import { shuffle } from "./helper/shuffle";
+import { imgSources } from "./imgSources";
 
 import { v4 as uuidv4 } from "uuid";
 
@@ -31,12 +32,13 @@ const App = (): JSX.Element => {
   const [cards, setCards] = useState<[] | Card[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDone, setIsDone] = useState<boolean>(false);
+  const [remainingSeconds, setRemainingSeconds] = useState(5);
 
-  // Data fetching, subscription, manually changing the DOM..
   useEffect(() => {
+    let allImgSources: any = [];
     const fetchData = async () => {
-      const allCards: string[] = await getSpotify();
-      const cards = allCards.map((imgSource): Card => {
+      // const allCards: string[] = await getSpotify();
+      const cards = imgSources.map((imgSource): Card => {
         return {
           id: uuidv4(),
           imgSrc: imgSource,
@@ -44,6 +46,7 @@ const App = (): JSX.Element => {
         };
       });
 
+      console.log(allImgSources);
       setAllCards(cards);
     };
 
@@ -91,17 +94,23 @@ const App = (): JSX.Element => {
 
   useEffect(() => {
     if (isDone) {
+      const timerId = setInterval(() => {
+        setRemainingSeconds((prevSeconds) => prevSeconds - 1);
+      }, 1000);
+
       setTimeout(() => {
-        alert("GAME DONE");
         setIsDone(false);
         restartGame();
+        clearInterval(timerId);
       }, 5000);
     }
-  });
+  }, [isDone]);
 
   const resetGame = () => {
     setLevel(1);
     setScore(0);
+    const shuffledCards = shuffle(allCards);
+    setCards(shuffledCards.slice(0, 2));
   };
 
   const restartGame = () => {
@@ -130,23 +139,19 @@ const App = (): JSX.Element => {
     }
   };
 
-  // const Cards = cards.map((card: Card) => (
-  //   <Album
-  //     key={card.id}
-  //     src={card.imgSrc}
-  //     onClickHandler={(e) => onClickHandler(e, card.id)}
-  //   />
-  // ));
-
   return (
     <div>
       <Header scores={{ score, bestScore }} />
       {/* <Main>{!isLoading && Cards}</Main> */}
       <Main>
-        {!isLoading && <Cards cards={cards} onClickHandler={onClickHandler} />}
+        {!isLoading && !isDone && (
+          <Cards cards={cards} onClickHandler={onClickHandler} />
+        )}
       </Main>
       {isLoading ? <Loading level={level} /> : null}
-      {isDone ? <CongratulationMsg /> : null}
+      {isDone ? (
+        <CongratulationMsg remainingSeconds={remainingSeconds} />
+      ) : null}
     </div>
   );
 };
