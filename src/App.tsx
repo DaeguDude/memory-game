@@ -7,7 +7,7 @@ import RestartMsg from "./components/RestartMsg";
 import CongratulationMsg from "./components/CongratulationMsg";
 import "./styles/style.css";
 import React, { useState, useEffect } from "react";
-import getSpotify from "./api/spotify";
+// import getSpotify from "./api/spotify";
 import styled from "styled-components";
 import { StyledImg } from "./components/StyledImg";
 import { shuffle } from "./helper/shuffle";
